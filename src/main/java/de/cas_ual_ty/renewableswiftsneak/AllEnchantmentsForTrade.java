@@ -1,7 +1,6 @@
 package de.cas_ual_ty.renewableswiftsneak;
 
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -18,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Mod(AllEnchantmentsForTrade.MOD_ID)
 public class AllEnchantmentsForTrade
@@ -63,14 +63,14 @@ public class AllEnchantmentsForTrade
         }
         
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource randomSource)
+        public MerchantOffer getOffer(Entity entity, Random random)
         {
-            Enchantment enchantment = enchantments.get(randomSource.nextInt(enchantments.size()));
-            int level = Mth.nextInt(randomSource, enchantment.getMinLevel(), enchantment.getMaxLevel());
+            Enchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
+            int level = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
             
             ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, level));
             
-            int cost = 2 + randomSource.nextInt(5 + level * 10) + 3 * level;
+            int cost = 2 + random.nextInt(5 + level * 10) + 3 * level;
             
             if(enchantment.isTreasureOnly())
             {
