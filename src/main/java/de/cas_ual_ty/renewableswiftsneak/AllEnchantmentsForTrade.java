@@ -29,8 +29,6 @@ public class AllEnchantmentsForTrade
         MinecraftForge.EVENT_BUS.addListener(this::villagerTrades);
     }
     
-    private List<VillagerTrades.ItemListing> trades;
-    
     private void villagerTrades(VillagerTradesEvent event)
     {
         if(event.getType() == VillagerProfession.LIBRARIAN)
@@ -48,11 +46,6 @@ public class AllEnchantmentsForTrade
                         trades.remove(i);
                         trades.add(i, new AllEnchantBooksForEmeralds(itemListing.villagerXp, enchantments));
                     }
-                }
-                
-                if(level == 1)
-                {
-                    this.trades = trades;
                 }
             }
         }
