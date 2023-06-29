@@ -1,13 +1,15 @@
 modLoader="javafml"
-loaderVersion="[45,)"
-license="MIT License"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
 issueTrackerURL="https://github.com/CAS-ual-TY/AllEnchantmentsForTrade/issues"
 
 [[mods]]
-    modId="allenchantmentsfortrade"
-    version="${file.jarVersion}"
-    displayName="All Enchantments For Trade"
+    modId="${mod_id}"
+    version="${mod_version}"
+    displayName="${mod_name}"
+    displayURL="https://github.com/CAS-ual-TY/AllEnchantmentsForTrade"
     logoFile="logo.png"
     credits="Mojang and the Minecraft Forge Team"
-    authors="CAS_ual_TY"
-    description='''Makes villagers sell all vanilla and mod enchantments.'''
+    authors="${mod_authors}"
+    displayTest="MATCH_VERSION"
+    description='''${mod_description}'''
