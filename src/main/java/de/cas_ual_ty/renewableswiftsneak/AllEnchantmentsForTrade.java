@@ -1,23 +1,24 @@
 package de.cas_ual_ty.renewableswiftsneak;
 
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.EnchantedBookItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
+import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.MerchantOffer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Mod(AllEnchantmentsForTrade.MOD_ID)
 public class AllEnchantmentsForTrade
@@ -37,12 +38,13 @@ public class AllEnchantmentsForTrade
             
             for(int level : event.getTrades().keySet())
             {
-                List<VillagerTrades.ItemListing> trades = event.getTrades().get(level);
+                List<VillagerTrades.ITrade> trades = event.getTrades().get(level);
                 
                 for(int i = 0; i < trades.size(); i++)
                 {
-                    if(trades.get(i) instanceof VillagerTrades.EnchantBookForEmeralds itemListing)
+                    if(trades.get(i) instanceof VillagerTrades.EnchantedItemForEmeraldsTrade)
                     {
+                        VillagerTrades.EnchantedItemForEmeraldsTrade itemListing = (VillagerTrades.EnchantedItemForEmeraldsTrade) trades.get(i);
                         trades.remove(i);
                         trades.add(i, new AllEnchantBooksForEmeralds(itemListing.villagerXp, enchantments));
                     }
@@ -51,7 +53,7 @@ public class AllEnchantmentsForTrade
         }
     }
     
-    private static class AllEnchantBooksForEmeralds implements VillagerTrades.ItemListing
+    private static class AllEnchantBooksForEmeralds implements VillagerTrades.ITrade
     {
         private final int villagerXp;
         private List<Enchantment> enchantments;
@@ -61,14 +63,15 @@ public class AllEnchantmentsForTrade
             this.villagerXp = villagerXp;
             this.enchantments = enchantments;
         }
-        
+    
+        @Nullable
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource randomSource)
+        public MerchantOffer getOffer(Entity entity, Random randomSource)
         {
             Enchantment enchantment = enchantments.get(randomSource.nextInt(enchantments.size()));
-            int level = Mth.nextInt(randomSource, enchantment.getMinLevel(), enchantment.getMaxLevel());
+            int level = MathHelper.nextInt(randomSource, enchantment.getMinLevel(), enchantment.getMaxLevel());
             
-            ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, level));
+            ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentData(enchantment, level));
             
             int cost = 2 + randomSource.nextInt(5 + level * 10) + 3 * level;
             
